@@ -72,3 +72,16 @@ class WheelSystem(object):
                     output = -100
                 self.robot.motors[n].target = output
 
+    def _current_motion(self):
+        self._calculate_back_matrix()
+        speeds = [0.0] * len(self._wheels)
+        for i, n in self._wheel_indices.iteritems():
+            speeds[i] = self._wheel_speeds[n].value
+        speed_vector = numpy.array([[x] for x in speeds])
+        calculated_components = self._back_matrix * speed_vector
+        return (float(calculated_components[0, 0]),
+                float(calculated_components[1, 0]),
+                float(calculated_components[2, 0]))
+
+    current_motion = property(fget = _current_motion)
+
