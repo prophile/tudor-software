@@ -1,7 +1,35 @@
-import socket
+import socket, time
+
+def _network_command(command, *args, **kwargs):
+    print command.format(*args, **kwargs)
 
 def _setup_network(settings):
-    pass
+    settings = settings or {}
+    network_settings = settings.get('network', {})
+    interface = network_settings.get('interface', 'wlan0')
+    key = network_settings.get('key', None)
+    ssid = network_settings.get('ssid', 'SR-COMPETITOR')
+    mode = network_settings.get('mode', 'managed')
+    # Kill NM
+    _network_command('killall NetworkManager')
+
+    # Connection to the wireless network
+    _network_command('iwconfig {interface} down', interface=interface)
+    _network_command('iwconfig {interface} mode {mode}', interface=interface,
+                                                         mode=mode)
+    if key is not None:
+        _network_command('iwconfig {interface} key "{key}"', interface=interface,
+                                                           key=key)
+    _network_command('iwconfig {interface} essid {ssid}', interface=interface,
+                                                          ssid=ssid)
+    _network_command('iwconfig {interface} up', interface=interface)
+    _network_command('yes n | dhclient {interface}', interface=interface)
+
+    # Wait 5 seconds for configuration to finish
+    time.sleep(5)
+
+    # Dump the config to the screen
+    _network_command('ifconfig')
 
 def _start_gstreamer(settings, address):
     pass
