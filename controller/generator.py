@@ -51,9 +51,9 @@ class GeneratorController(Controller):
         handler(*args)
 
     def handle_go(self, advancing = 0, lateral = 0, angular = 0):
-        self.wheels.drive(advancing = float(advancing),
-                          lateral = float(lateral),
-                          angular = float(angular))
+        self.wheels.target = (float(advancing),
+                              float(lateral),
+                              float(angular))
 
     def handle_acquire(self):
         if self.in_grab:
@@ -91,6 +91,13 @@ class GeneratorController(Controller):
             self.in_grab = False
         schedule_by_parts(self.scheduler, acquire())
 
+    def handle_adjust(self, state):
+        state = (state.lower() == 'on')
+        if state:
+            self.wheels.start_turn_adjust()
+        else:
+            self.wheels.stop_turn_adjust()
+
     def handle_pan(self, yaw, pitch):
         yaw, pitch = float(yaw), float(pitch)
         self.camera_mount.yaw = radians(yaw)
@@ -104,5 +111,5 @@ class GeneratorController(Controller):
         self.camera_mount.yaw = 0
         self.camera_mount.pitch = 0
         self.camera_mount.headlights = False
-        self.wheels.drive(0, 0, 0)
+        self.wheels.target = (0, 0, 0)
 
