@@ -1,4 +1,4 @@
-import socket, time
+import socket, time, subprocess
 
 def _network_command(command, *args, **kwargs):
     print command.format(*args, **kwargs)
@@ -31,11 +31,23 @@ def _setup_network(settings):
     # Dump the config to the screen
     _network_command('ifconfig')
 
-def _start_gstreamer(settings, address):
-    pass
+class _Streamer(object):
+    COMMAND = ("gst-launch autovideosrc ! "
+               "video/x-raw-rgb,width=320,height=240,framerate=5/1 ! "
+               "ffmpegcolorspace ! "
+               "theoraenc speed-level=2 quality=63 ! "
+               "udpsink host={host} port=5000")
 
-def _stop_gstreamer(settings):
-    pass
+    def __init__(self, settings):
+        self.instance = None
+
+    def start(self, address):
+        self.instance = subprocess.Popen(self.COMMAND.format(host=address),
+                                         shell=True)
+
+    def stop(self):
+        self.instance.terminate()
+        self.instance = None
 
 def remote_control(settings):
     _setup_network(settings)
@@ -45,9 +57,10 @@ def remote_control(settings):
     listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     listener.bind(('::', 13525))
     listener.listen(5)
+    streamer = _Streamer(settings)
     while True:
         (client, address) = listener.accept()
-        _start_gstreamer(settings, address[0])
+        streamer.start(address[0])
         client.settimeout(8)
         client_fp = client.makefile()
         try:
@@ -60,5 +73,5 @@ def remote_control(settings):
         except IOError:
             client_fp.close()
             client.close()
-        _stop_gstreamer(settings)
+        streamer.stop()
 
