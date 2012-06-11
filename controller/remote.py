@@ -12,13 +12,13 @@ def _setup_network(settings):
     network_settings = settings.get('network', {})
     interface = network_settings.get('interface', 'wlan0')
     key = network_settings.get('key', None)
-    ssid = network_settings.get('ssid', 'SR-COMPETITOR')
+    ssid = network_settings['ssid']
     mode = network_settings.get('mode', 'managed')
     # Kill NM
     _network_command('killall NetworkManager')
 
     # Connection to the wireless network
-    _network_command('iwconfig {interface} down', interface=interface)
+    _network_command('ifconfig {interface} down', interface=interface)
     _network_command('iwconfig {interface} mode {mode}', interface=interface,
                                                          mode=mode)
     if key is not None:
@@ -26,7 +26,7 @@ def _setup_network(settings):
                                                            key=key)
     _network_command('iwconfig {interface} essid {ssid}', interface=interface,
                                                           ssid=ssid)
-    _network_command('iwconfig {interface} up', interface=interface)
+    _network_command('ifconfig {interface} up', interface=interface)
     _network_command('yes n | dhclient {interface}', interface=interface)
 
     # Wait 5 seconds for configuration to finish
