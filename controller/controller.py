@@ -20,7 +20,7 @@ class _ConfigurationLoader(object):
         config = self.configuration['wheels']
         for n, wheel in config.iteritems():
             self.controller.wheels.add_wheel(n,
-                                             wheel['x'], wheel['y'],
+                                             wheel['distance'],
                                              math.radians(wheel['angle']),
                                              wheel.get('radius', 0.05),
                                              wheel.get('calibration', 0.01))

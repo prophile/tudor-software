@@ -1,20 +1,17 @@
 name: Henry
 wheels:
     0:
-        x: -0.43
-        y: 0.25
         radius: 0.05
-        angle: 30
+        distance: 0.5
+        angle: -60
     1:
-        x: 0.43
-        y: 0.25
         radius: 0.05
-        angle: -30
+        distance: 0.5
+        angle: 60
     2:
-        x: 0
-        y: -0.5
         radius: 0.05
-        angle: 90
+        distance: 0.5
+        angle: -180
 camera_mount:
     yaw:
         servo: [0, 0]

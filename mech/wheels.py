@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from math import sin, cos
+from math import sin, cos, pi
 
 import time
 
@@ -23,11 +23,11 @@ class WheelSystem(object):
         self.target = (0.0, 0.0, 0.0)
         self.ramp = True
 
-    def add_wheel(self, n, x, y, angle, radius, calibration = 1.0):
+    def add_wheel(self, n, distance, angle, radius, calibration = 1.0):
         overall_adjust = calibration / radius
-        factor_advance = cos(angle)
-        factor_lateral = sin(angle)
-        factor_turn = x*cos(angle) + y*sin(angle)
+        factor_advance = -sin(angle)
+        factor_lateral = cos(angle)
+        factor_turn = distance
         row = (factor_advance * overall_adjust,
                factor_lateral * overall_adjust,
                factor_turn * overall_adjust)
