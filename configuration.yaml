@@ -24,4 +24,7 @@ grabber:
         vertical: [0, 7]
         left: [0, 5]
         right: [0, 6]
+control:
+    network:
+        ssid: ECS-WLAN
 
