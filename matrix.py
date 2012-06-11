@@ -2,7 +2,12 @@ try:
     import numpy
     class Matrix(object):
         def __init__(self, rows):
-            self._impl = numpy.matrix(rows)
+            if isinstance(rows, Matrix):
+                self._impl = rows._impl
+            elif isinstance(rows, numpy.matrix):
+                self._impl = rows
+            else:
+                self._impl = numpy.matrix(rows)
 
         def pseudo_inverse(self):
             return Matrix(numpy.linalg.pinv(self._impl))
