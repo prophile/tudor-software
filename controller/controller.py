@@ -26,13 +26,14 @@ class _ConfigurationLoader(object):
                                              wheel.get('radius', 0.05),
                                              wheel.get('calibration', 0.01))
     def load_grabber(self):
-        config = self.configuration['grabber']
+        config = self.configuration.get('grabber', {})
+        servo_config = config.get('servos', {})
         print "\tconfiguring vertical grabber servo..."
-        self.controller.grabber.vertical_servo = config['servos']['vertical']
+        self.controller.grabber.vertical_servo = servo_config.get('vertical', None)
         print "\tconfiguring left grabber servo..."
-        self.controller.grabber.left_servo = config['servos']['left']
+        self.controller.grabber.left_servo = servo_config.get('left', None)
         print "\tconfiguring right grabber servo..."
-        self.controller.grabber.right_servo = config['servos']['right']
+        self.controller.grabber.right_servo = servo_config.get('right', None)
 
     def load_camera_mount(self):
         config = self.configuration['camera_mount']
