@@ -8,6 +8,7 @@ wheels:
         radius: 0.05
         distance: 0.5
         angle: 60
+        calibration: -0.01
     2:
         radius: 0.05
         distance: 0.5
