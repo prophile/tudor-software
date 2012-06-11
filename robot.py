@@ -1,4 +1,4 @@
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 if DEBUG_MODE:
     from test import mock_robot
