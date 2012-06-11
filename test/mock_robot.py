@@ -66,5 +66,6 @@ class MockRobot(object):
         self.servos = [MockServo(n, servo_callback) for n in xrange(nservos)]
         self.power = MockPower()
         self.usbkey = '.'
+        self._info_thread.name = "Info"
         self._info_thread.start()
 
