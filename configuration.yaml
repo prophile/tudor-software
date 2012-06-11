@@ -12,18 +12,19 @@ wheels:
         radius: 0.05
         distance: 0.5
         angle: -180
-camera_mount:
-    yaw:
-        servo: [0, 0]
-        calibration: [1, 0]
-    pitch:
-        servo: [0, 1]
-        calibration: [1, 0]
+        calibration: 0.008
+camera_mount: {}
+#    yaw:
+#        servo: [0, 0]
+#        calibration: [1, 0]
+#    pitch:
+#        servo: [0, 1]
+#        calibration: [1, 0]
 grabber:
-    servos:
-        vertical: [0, 7]
-        left: [0, 5]
-        right: [0, 6]
+    servos: {}
+#        vertical: [0, 7]
+#        left: [0, 5]
+#        right: [0, 6]
 control:
     network:
         ssid: ECS-WLAN
