@@ -1,5 +1,7 @@
 import socket, time, subprocess, os
 
+PORT = 13525
+
 def _network_command(command, *args, **kwargs):
     cmd = command.format(*args, **kwargs)
     print cmd
@@ -53,15 +55,27 @@ class _Streamer(object):
 
 def remote_control(settings):
     _setup_network(settings)
-    listener = socket.socket(socket.AF_INET6,
-                             socket.SOCK_STREAM,
-                             socket.SOL_TCP)
-    listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    listener.bind(('::', 13525))
-    listener.listen(5)
+    try:
+        listener = socket.socket(socket.AF_INET6,
+                                 socket.SOCK_STREAM,
+                                 socket.SOL_TCP)
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        listener.bind(('::', PORT))
+        listener.listen(5)
+    # TODO: make this exception more constrained
+    except Exception:
+        print "WARNING: morons detected, IPv6 may have been disabled"
+        listener = socket.socket(socket.AF_INET,
+                                 socket.SOCK_STREAM,
+                                 socket.SOL_TCP)
+        listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        listener.bind(('0.0.0.0', PORT))
+        listener.listen(5)
+    print "Listening on {0}...".format(PORT)
     streamer = _Streamer(settings)
     while True:
         (client, address) = listener.accept()
+        print "Got connection from {0}".format(address[0])
         streamer.start(address[0])
         client.settimeout(8)
         client_fp = client.makefile()
@@ -76,4 +90,5 @@ def remote_control(settings):
             client_fp.close()
             client.close()
         streamer.stop()
+        print "Lost connection."
 
