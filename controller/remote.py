@@ -1,7 +1,9 @@
-import socket, time, subprocess
+import socket, time, subprocess, os
 
 def _network_command(command, *args, **kwargs):
-    print command.format(*args, **kwargs)
+    cmd = command.format(*args, **kwargs)
+    print cmd
+    os.system(cmd)
 
 def _setup_network(settings):
     settings = settings or {}
