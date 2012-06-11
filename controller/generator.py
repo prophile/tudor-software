@@ -26,6 +26,7 @@ class GeneratorController(Controller):
         self.process = Process(target = generator_process,
                                args = (child_conn, self.generator,
                                        self.control_settings))
+        self.process.name = "Control Logic"
         self.process.start()
         self.in_grab = False
 
