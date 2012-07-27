@@ -19,6 +19,11 @@ def _position_uncalibrate(position, calibration):
     return output
 
 def set(robot, servo, position, calibration = None):
+    """
+    Utility method for setting a servo position. If the servo is given as
+    None, this has no effect.
+    
+    """
     if servo is None:
         return
     position = _position_calibrate(position, calibration)
